@@ -1,0 +1,27 @@
+select t1.class,
+    count(sunk)
+from (
+        select distinct class, count(name) as ships_amount from (
+        SELECT name,
+            class,
+            null as result
+        from ships
+        union
+        SELECT ship,
+            ship,
+            result
+        from outcomes) t  
+group by class
+having count (name)>2
+) t1
+JOIN (
+    SELECT classes.class,
+        count(*) as sunk
+    FROM classes
+        left join ships on classes.class = ships.class
+        left join outcomes on (outcomes.ship = classes.class)
+        or (outcomes.ship = ships.name)
+    where result = 'sunk'
+    group by classes.class
+) t2 on t1.class = t2.class 
+group by t1.class
